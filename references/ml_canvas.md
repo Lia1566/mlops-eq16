@@ -3,59 +3,74 @@
 ## 1. VALUE PREPOSITION
 
 ### Problem Statement
-Educational institutions need to identify students at risk of poor performance early to provide timely intervention and support. Currently, performance evaluation happens retroactively, making it diffcult to implement preventative measures. 
+Educational institutions need to identify students at risk of poor performance early to provide timely intervention and support. Currently, performance evaluation happens retroactively, making it difficult to implement preventative measures. This project uses entrance examination data to predict student performance, enabling proactive identification of students who may need additional academic support.
 
 ### Solution
-A machine learning system that predicts student academic performance based on demographic, educational, and socioeconomic factors, enabling proactive interventations and personalized support strategies. 
+A machine learning system that predicts student academic performance (4 categories: Average, Good, Very Good, Excellent) based on demographic, educational, and socioeconomic factors from entrance examination records, enabling proactive interventations and personalized support strategies. 
 
 ### Impact and Benefits
 - **For Students**: Early identification of challenges, personalized support, improved outcomes.
-- **For Educators**: Data-driven insights for targeted interventions, resource allocation optimization.
-- **For Institutions**: Improved retention rates, better academic outcomes, enhanced reputation.
-- **For Parents**: Early awareness of potential issues, opportunity for timely support.
+- **For Educators**: Data-driven insights for targeted interventions, efficient resource allocation for tutoring and mentoring programs.
+- **For Institutions**: Strategic resource planning, improved student retention, enhanced academic outcomes.
+- **For Parents**: Early awareness of potential challenges, opportunity for timely support and engagement.
 
-### Success Metrics
+### Success Metrics (NEEDS TO BE UPDATED BASED ON MODEL'S RESULTS)
 - Prediction accuracy: >85%
 - Early identification rate: Detect at risk students before academic struggles intensify
 - Intervention effectiveness: Track improvement in predicted at risk students
 - Model fairness: Ensure equitable predictions across demographic groups
 
-  ---
+### Realistic Expectations
+- Multi-class classification is inherently challenging: 4 classes with overlapping characteristics
+- Model performs best for "Average" class: The most critical category for early intervention
+- >50% accuracy is meaningful: Provides actionable insights better than random assignment
+- Should be used as advisory tool: Not sole decision maker for student interventions
+
+---
 ## 2. DECISIONS
 
 ### What Decisions Will Be Made?
-1. **Student Support Allocation**: Which students need additional academic support?
-2. **Intervention Type**: What kind of support (tutoring, counseling, coaching) is most appropriate?
-3. **Resource Planning**: How to allocate educational resources effectively?
-4. **Early Warning System**: When to alert educators about potential performance issues?
+1. **Student Support Allocation**: Prioritize students predicted as "Average" for proactive tutoring and mentoring.
+2. **Intervention Type**: Tailored support based on feature analysis (study time, coaching, prior performance).
+3. **Resource Planning**: Allocate counseling and academic support resources to high-risk cohorts.
+4. **Early Warning System**: Flag students predicted as "Average" or "Good" for monitoring during first semester.
  
 ### How Will Predictions Be Used?
-- **Real time Monitoring**: Continuous assessment of student performance trajectory
-- **Interventation Triggers**: Automated alerts when prediction indicates risk
-- **Personalized Recommendations**: Tailored support strategies based on contributing factors
-- **Policy Planning**: Inform institutional policies on student support programs
+- **Batch Processing**: Process entire incoming student cohort before semester begins.
+- **Risk Categorization**: Assign students to support tiers (High Priority/Moderate/Standard/Advanced).
+- **Personalized Recommendations**: Identify contributing factors (low study time, lack of coaching) for targeted interventions.
+- **Resource Optimization**: Direct limited tutoring resources to students with highest predicted need.
 
 ### Decision Makers
-- Academic advisors and counselors
-- Teachers and instructors
-- School administrators
-- Parents and guardians (with appropriate consent)
+- Academic advisors and counselors (primary users)
+- Student support services coordinators
+- Department heads (resource allocations)
+- First-year review of demographic feature usage
  
 ---
 
 ## 3. MACHINE LEARNING TASK
 
 ### Task Type
-**Classificarion Problem** - Multi-class or Binary Classification
+**Multi-class Classification Problem** - (4 Classes)
 
 ### Prediction Target
-**Performance** - Student academic performance level
-- Categories: [To be determined after EDA - likely Poor/Average/Good or similar)
+**Performance** - Student academic performance level based on entrance examination
+- Categories (622 students after cleaning):
+  - Average: 152 students (24.4%) - Primary focus for interventation
+  - Good: 194 students (31.2%) - Largest class
+  - Very good (Vg): 178 students (28.6%)
+  - Excellent: 98 students (15.8%) - Smallest class, underrepresented
+ 
+### Class Imbalance Impact
+- "Excellent" class has fewer samples, leading to poorer predictions for this category.
+- Model optimized for identifying "Average" students (most critical for support).
+- Future work: Apply SMOTE or class weighting to balance training. 
  
 ### Input Features (12 Features)
 1. **Gender** - Student's gender
 2. **Caste** - Social category
-3. **Coaching** - Wether student received coaching (Yes/No)
+3. **Coaching** - What type of coaching a student received  
 4. **Time** - Study time or time-related factor
 5. **Class_ten_education** - Type of schoolong at Class 10 level
 6. **twelve_education** - Type of schooling at Class 12 level
@@ -71,51 +86,73 @@ A machine learning system that predicts student academic performance based on de
 ## 4. DATA SOURCES
 
 ### Primary Dataset
-- Source: Student Entry Performance Dataset (student_entry_performance_original.csv)
+- Source: UCI Machine Learning Repository - Student Performance on an Entrance Examination
+- URL: https://archive.ics.uci.edu/dataset/582/student+performance+on+an+entrance+examination
 - Records: 666 Students
+- After cleaning: 622 students (44 duplicated removed - 6.6% of data)
 - Features: 12 attributes
 - Format: CSV file
+- Data split: 80% train (497 samples) / 20% test (125 samples) with stratification
 
 ### Data Characteristics
 - Structured data: Tabular format with mixed data types
-- Categorical variables: Gender, Caste, Coaching, Education types, Medium, Occupations
-- Numerical variables: Class X and XII percentages, Time
+- Data quality: Excellent - no missing values detected
+- Categorical variables: 7 features (Gender, Caste, Coaching, Education types, Medium, Occupations)
+- Ordinal Features: 3 features (Class X and XII percentages, Time)
 - Target Variable: Performance (categorical)
 
-### Data Quality Considerations
-- Missing values: To be assessed during EDA
-- Inconsistent formatting: To be identified and cleaned
-- Outliers: Particularly in percentage scores
-- Class imbalance: To be evaluated for target variable
-- Data privacy: Ensure anonymization of sensitive information
+### Data Quality Assessment 
+- Missing values: None found (0 null values)
+- Duplicates: 44 duplicates rows identified and removed
+- Outliers: Minimal - performance categories are discrete, percentages are categorical
+- Class imbalance - "Excellent" class underrepresented (15.8% vs 31.2% for "Good")
+- Data privacy - Dataset is publicly available, pre-anonymized
 
-### External Data Sources (Feature Enhancement)
-- Attendance records
-- Assignment/test scores over time
-- Extracurricular participation
-- Socioeconomical indicators
+### Data Limitations
+- Static dataset: One-time snapshot, cannot collect longitudinal data
+- Limited features: Only 12 original features, no temporal information
+- No continous scores: Performance is categorical, not continuous percentages
+- Demographic bias potential: Caste features may reflect systemic inequalities
+- No external data: Cannot augment with attendance, test scores, extracurricular activities
 
 ---
 
 ## 5. COLLECTING DATA 
 
 ### Data Collection Strategy
-- Current: Static dataset from educational institution records
+- Current: Static public dataset from UCI repository
+- Access: Direct CSV download, stored in data/raw/
+- Reproducibility: Original file tracked with DVC for version control
 
 ### Data Pipeline
 1. Raw Data Storage: data/raw/ - Original immutable dataset
-2. Interim Data: data/interim/ - Cleaned and validated data
+   - Original, immutable dataset (666 rows)
+   - Tracked with DVC: 'dvc add data/raw/student_entry_performance_original.csv'
+2. Interim Data: data/interim/ - Cleaned data
+   - Duplicated removed (622 rows)
+   - Column names standardized
+   - Tracked with DVC: 'dvc add data/processed/student_performance_cleaned.csv'
 3. Processed Data: data/processed/ - Feature-engineered, model-ready data
+   - Features encoded
+   - Ready for model training
+   - Tracked with DVC: 'dvc add data/processed/student_performance_preprocessed.csv'
 
 ### Data Versioning
 - Tool: DVC (Data Version Control)
-- Strategy: Track all data transformations and versions
-- Benefits: Reproducibility, experimentation, rollback capability
+- Repository: Git + DVC for code and data versioning
+- Benefits:
+  - Full reproducibility of data transformations
+  - Ability to roll back to previous dataset versions
+  - Experiment tracking with different preprocessing approaches
+- DVC Files created:
+  - 
 
 ### Data Updates
-- Frequency: Initially static; future real-time or batch updates
-- Validation: Automated data quality checks
-- Monitoring: Track data drift and distribution changes
+- Frequency: Not applicable for static UCI dataset
+- Future scenario (if deployed): Annual retraining with new cohort data
+- Validation: Automated data quality checks implemented in preprocessing pipeline
+- Monitoring: Would track data drift using Population Stability Index (PSI) if new data available
+- Limitations: Cannot implement real-time updates with public research dataset
 
 ---
 
@@ -175,12 +212,20 @@ A machine learning system that predicts student academic performance based on de
 
 ### Training Pipeline
 
-Raw Data -> Cleaning -> Feature Engineering -> Train/Test Split -> Model Training -> Hyperparameter Tuning -> Model Selection -> Final Evaluation
+Raw Data (666 rows) -> Cleaning (622 rows) -> Feature Engineering -> Train/Test Split (80/20 stratified) -> Model Training -> Hyperparameter Tuning -> Model Selection -> Final Evaluation
+
+### Training Performance
+- Training time per model:
+- Grid search time:
+- Total training time:
+- Hardware: Standard laptop (sufficient for this dataset size)
 
 ### Experiment Tracking
-- Track model versions, parameters, and performance
-- Document training configurations
-- Version control with DVC and Git
+- Code versioning: Git repository with commit history
+- Data versioning: DVC for all dataset versions
+- Model versioning: DVC for trained model files
+- Documentation: Google colab with inline markdown implementations
+- Results tracking: 
 
 ---
 
@@ -196,26 +241,47 @@ Raw Data -> Cleaning -> Feature Engineering -> Train/Test Split -> Model Trainin
 
 ---
 
-## 9. MAKING PREDICTION
+## 9. MAKING PREDICTIONS
 
-- Mode: Batch predictions only
-- **Frequency**
-  - Weekly: Sunda 12 AM
-  - Monthly: COmprehensive analysis
-  - On demand: new enrollments
-- Processing time: 12-30 minutes for 666 students
-- Resources: Cloud VM (4-8 cores, 16-36GB RAM) or on-premise server
-- Output: Performance category + confidence score + contributing factors
+### Deployment Mode
+Batch processing only (no real time system for this project)
+
+### Prediction Pipeline
+1. Load preprocessed test data
+2. Load trained model
+3. Load scaler if needed
+4. Generate predictions
+5. Output: Class label + confidence scores
+
+### Realistic Deployment Scenario (Future Work)
+
+#### Batch Prediction Workflow
+- **Frequency**: Before semester start (e.g., August for Fall enrollment)
+- **Input**: CSV file with new student cohort data (600-700 students)
+- **Processing Time**: < 5 minutes for full cohort (based on model inference speed)
+- **Output Format**: CSV with columns:
+  - Student_ID
+  - Predicted_Performance (Average/Good/Vg/Excellent)
+  - Confidence_Score
+  - Risk_Category (High/Medium/Low priority for intervention)
+  - Top_Contributing_Features
+
+#### Production Requirements (If Deployed)
+- **Computational Resources**: 
+  - CPU: 2-4 cores
+  - RAM: 4-8 GB
+  - Storage: < 100 MB (model + scaler files)
+  - Cloud option: AWS EC2 t3.small ($0.02/hour) or equivalent
+- **Latency**: 
+  - Batch: 5-10 minutes for 1000 students
+  - Single prediction: < 50ms per student
+- **Scalability**: Current model can handle 10,000+ students per batch easily
 
 ---
 
 ## 10. MONITORING
 
-- **Metrics tracked**: Accuracy, precision, recall, F1-score, confusion matrix
-- **Frequency**:
-  - **Weekly**: Performance metrics review
-  - **Monthly**: Data drift detection (PSI), detailed analysis
-  - **Quarterly**: Comprehensive evaluation, retraining assessment
+- **Metrics to track**: Accuracy, precision, recall, F1-score, confusion matrix
 - **Methods**: 
   - Automated dashboard
   - Compare predictions vs actual outcomes (end of semester)
@@ -229,16 +295,16 @@ Raw Data -> Cleaning -> Feature Engineering -> Train/Test Split -> Model Trainin
 ---
 
 ## Team Roles
-- **Data Engineer**: Data pipeline, cleaning, DVC versioning
-- **ML Engineer**: Model development, training, optimization
-- **Data Scientist**: EDA, visualization, statistical analysis
-- **Software Engineer**: Repository setup, monitoring, documentation
-- **Site Reliability Engineer (DevOps): CI/CD, monitoring, infrastructure
+- **Data Engineer**: Data pipeline development, cleaning scripts, DVC implementation
+- **ML Engineer**: Model development, training, optimization, selection
+- **Data Scientist**: EDA, visualization, statistical analysis, feature importance interpretation
+- **Software Engineer**: Git repository setup, code organization, documentation
+- **Site Reliability Engineer (DevOps): CI/CD pipeline, model deployment, infrastructure
 
 ---
 
 ## Key Constraints
-- Small dataset (666 records)
+- Small dataset (666 records, 622 after cleaning)
 - Static snapshot (no temporal data)
 - Limited to 12 features
 - Must ensure fairness across demographic groups
