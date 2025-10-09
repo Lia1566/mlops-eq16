@@ -1,2 +1,6 @@
 /student_performance_cleaned.csv
 /student_performance_preprocessed.csv
+/student_performance_encoded.csv
+/student_performance_train.csv
+/student_performance_test.csv
+/student_performance_binary_preprocessed.csv
