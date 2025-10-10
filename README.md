@@ -49,19 +49,19 @@ mlops-eq16/
 git clone https://github.com/Lia1566/mlops-eq16.git
 cd mlops-eq16
 
-# Install dependencies
+#### 2. Install dependencies
 pip install -r requirements.txt
 
-# Pull Data with DVC
+#### 3.Pull Data with DVC
 dvc pull
 
-4. Run Notebooks
+#### 4.Run Notebooks
 Execute notebooks in order:
 
-01_EDA.ipynb - Exploratory Data Analysis
-02_Data_Preprocessing.ipynb - Data cleaning and transformation
-03_Data_Versioning.ipynb - DVC implementation
-04_Model_Building.ipynb - Model training and evaluation
+- `01_EDA.ipynb` - Exploratory Data Analysis
+- `02_Data_Preprocessing.ipynb` - Data cleaning and transformation
+- `03_Data_Versioning.ipynb` - DVC implementation
+- `04_Model_Building.ipynb` - Model training and evaluation
 
 Technologies Used
 
