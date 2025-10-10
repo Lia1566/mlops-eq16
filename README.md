@@ -9,6 +9,26 @@ Binary classification model to predict student entrance exam performance (High P
 
 ---
 
+## 1) Requirements Analysis
+**Problem statement:** Predict whether a student’s entrance-exam performance is *High* or *Lower* using demographic and academic features to inform targeted support.
+
+**Value proposition**
+- **Students:** early identification for tutoring or program placement  
+- **Institutions:** data-driven resource allocation and improved pass rates  
+- **Stakeholders:** transparent, reproducible pipeline for ongoing policy and curriculum decisions  
+
+**ML Canvas (summary)**
+- **Users:** academic advisors, program directors  
+- **Inputs:** cleaned tabular features from `student_entry_performance_original.csv`  
+- **Output:** binary class + probability  
+- **Decision/action:** flag “at-risk” students for intervention  
+- **Risks:** bias across gender/caste/medium; drift as curricula change  
+- **KPIs:** Recall on “Lower” class, Balanced Accuracy, AUC; operational KPI = intervention hit rate  
+
+> Full canvas in `docs/ML_Canvas.md`
+
+---
+
 ### Team Members & Roles
 
 | Role | Name | Responsibilities |
