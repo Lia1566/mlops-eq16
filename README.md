@@ -93,16 +93,39 @@ mlops-eq16/
 ├── README.md
 ├── .gitignore
 ├── data/
+│   └── interim/
+│   └── processed/
+│   └── raw/
+│   │   └── student_entry_performance_modified.csv
+│   │   └── student_entry_performance_modified.csv.dvc
+│   │   └── student_entry_performance_original.csv
+│   │   └── student_entry_performance_original.csv.dvc
 ├── docs/
+│   └── DATA_VERSIONING_SUMMARY.text
+│   └── DVC_SETUP_COMMANDS.text
+│   └── DVC_SETUO_INSTRUCTIONS.txt
+│   └── ML_Canvas.pdf
+│   └── PREPROCESSING_DOCUMENTATION.md
+│   └── ROLE_INTERACTIONS_DOCUMENTATION.txt
 ├── mlops/
+│   └── init.py
+│   └── modeling/
+│   │   └── init.py
 ├── models/
+│   └── best_model_gradient_boosting.pkl
+│   └── best_model_gradient_boosting.okl.dvc
+│   └── scaler.pkl
+│   └── scaler.pkl.dvc
 ├── notebooks/
+│   └── phase1_team16.ipynb
 ├── references/
-├── reports/
-│   └── figures/
+├── reports/figures/
+│   └── model_evaluation_results.png
 ├── scripts/
 └── src/
     └── scripts/
+│   │   └── init_dvc.sh
+│   │   └── track_data_dvc.sh
 
 ```
 ## Quick Start
