@@ -1,0 +1,22 @@
+data:
+  raw_path: data/raw/student_entry_performance_original.csv
+  processed_path: data/processed/final_dataset.csv
+  test_size: 0.2
+  random_state: 42
+
+preprocessing:
+  scaling_method: standard
+  encoding_method: onehot
+  handle_missing: drop
+
+model:
+  algorithm: svm
+  kernel: linear
+  C: 1.0
+  gamma: scale
+  class_weight: balanced
+  cross_validation: 5
+
+metrics:
+  scoring: ["accuracy", "precision", "recall", "f1", "roc_auc"]
+  focus_metric: recall
