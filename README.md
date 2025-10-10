@@ -22,7 +22,7 @@ Binary classification model to predict student entrance exam performance (High P
 ---
 
 ### Project Structure
-
+```
 mlops-eq16/
 ├── README.md
 ├── requirements.txt
@@ -41,7 +41,7 @@ mlops-eq16/
 │   └── ROLE_INTERACTIONS_DOCUMENTATION.txt
 └── visualizations/
 └── model_evaluation_results.png
-
+```
 ### Quick Start
 
 #### 1. Clone Repository
