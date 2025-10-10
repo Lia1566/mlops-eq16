@@ -1,0 +1,5 @@
+outs:
+- md5: 6d2b383ca9a196b547c05c1f4b79db2a
+  size: 509780
+  hash: md5
+  path: best_model_gradient_boosting.pkl
