@@ -9,7 +9,7 @@ Binary classification model to predict student entrance exam performance (High P
 
 ---
 
-## 1) Requirements Analysis
+## Requirements Analysis
 **Problem statement:** Predict whether a student’s entrance-exam performance is *High* or *Lower* using demographic and academic features to inform targeted support.
 
 **Value proposition**
@@ -19,14 +19,55 @@ Binary classification model to predict student entrance exam performance (High P
 
 **ML Canvas (summary)**
 - **Users:** academic advisors, program directors  
-- **Inputs:** cleaned tabular features from `student_entry_performance_original.csv`  
+- **Inputs:** cleaned tabular features from `data/raw/student_entry_performance_original.csv`  
 - **Output:** binary class + probability  
 - **Decision/action:** flag “at-risk” students for intervention  
 - **Risks:** bias across gender/caste/medium; drift as curricula change  
 - **KPIs:** Recall on “Lower” class, Balanced Accuracy, AUC; operational KPI = intervention hit rate  
 
-> Full canvas in `docs/ML_Canvas.md`
+> Full canvas in `docs/ML_Canvas.pdf`
 
+---
+
+## Data Manipulation & Preparation
+- **EDA notebook:** `notebooks/01_EDA.ipynb`  
+- **Cleaning & validation:** `notebooks/02_Data_Preprocessing.ipynb`  
+- Handled null/empty values, inconsistencies, outliers, invalid categories.  
+- **Transformations for modeling:** type casting, encoding, scaling, train/test split.  
+- **Metrics tracked:** row counts, duplicates removed, feature cardinalities, class balance.
+
+---
+
+## Data Exploration & Preprocessing
+- **Descriptive statistics & visuals:** distributions, correlations, target balance (`reports/figures/`).  
+- **Preprocessing techniques:**
+  - Normalization/Standardization  
+  - Categorical encoding (One-Hot / Ordinal)  
+  - Dimensionality reduction (PCA if applicable)  
+- **Artifacts:** `data/processed/` (DVC-tracked), `reports/figures/`
+
+---
+## Data Versioning (DVC)
+- **Versioned items:** raw/interim/processed datasets, intermediate artifacts  
+- **Pipeline:** `dvc.yaml` (`prepare → preprocess → train → evaluate`), `params.yaml` for hyperparams  
+- **Remotes:** Google Drive / S3 / local remote (see `docs/DVC_SETUP.md`)  
+- **Change log:** `dvc metrics show` and `dvc plots diff`; human-readable `CHANGELOG.md`
+---
+## Modeling, Tuning & Evaluation
+- **Algorithms:** Logistic Regression, SVM, Random Forest, XGBoost, kNN, Baseline Majority  
+- **Final baseline:** Linear SVM — Accuracy 71.2 %, Precision 67.3 %, Recall 67.3 %, F1 67.3 %, ROC-AUC 83.2 %  
+- **Hyperparameter tuning:** Grid/Random search with cross-validation  
+- **Selection criterion:** maximize Recall on “Lower” class, then AUC  
+- **Outputs:** confusion matrix, PR/ROC curves, model card (`models/model_card.md`)
+---
+## GitHub Collaboration
+**Expectations**
+- Active contributions from all members (PRs, reviews)  
+- Documented roles (DevOps, Software Engineer, Data Engineer, ML Engineer, Data Scientist)  
+- Branching model: `main` (protected) → `dev` → `feature/<slug>`  
+- Commit style: Conventional Commits (`feat:`, `fix:`, `docs:` …)  
+- **CI (optional):** GitHub Actions for linting and `dvc pull` checks  
+- Code style: Black + isort + Flake8 + pre-commit hooks  
 ---
 
 ### Team Members & Roles
@@ -40,6 +81,11 @@ Binary classification model to predict student entrance exam performance (High P
 | **ML Engineer** | Roberto López Baldomero | Model training, tuning, deployment |
 
 ---
+
+## Executive Presentation
+- **File:** `docs/executive_presentation.pdf`  
+- Summarizes problem → value → data → model → results → risks → ops plan  
+- Highlights actionable insights and limitations  
 
 ### Project Structure
 ```
@@ -62,20 +108,26 @@ mlops-eq16/
 └── visualizations/
 └── model_evaluation_results.png
 ```
-### Quick Start
+## Quick Start
 
-#### 1. Clone Repository
 ```bash
+# 1. Clone Repository
 git clone https://github.com/Lia1566/mlops-eq16.git
 cd mlops-eq16
 
-#### 2. Install dependencies
+# 2. Install dependencies
 pip install -r requirements.txt
 
-#### 3.Pull Data with DVC
+# 3. Environment
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pre-commit install
+
+# 4.Pull Data with DVC
 dvc pull
 
-#### 4.Run Notebooks
+# 4.Run Notebooks
 Execute notebooks in order:
 
 - `01_EDA.ipynb` - Exploratory Data Analysis
@@ -83,7 +135,22 @@ Execute notebooks in order:
 - `03_Data_Versioning.ipynb` - DVC implementation
 - `04_Model_Building.ipynb` - Model training and evaluation
 
-Technologies Used
+# 5. 5. Reproduce full pipeline
+dvc repro
+
+# 6. View metrics
+dvc metrics show
+
+# DVC Basics
+
+dvc add data/raw/student_entry_performance_original.csv
+git add data/raw/.gitignore student_entry_performance_original.csv.dvc
+git commit -m "data: add raw student dataset"
+dvc push
+
+```
+
+## Technologies Used
 
 Language: Python 3.x
 ML Libraries: scikit-learn, pandas, numpy
@@ -91,10 +158,7 @@ Version Control: Git, DVC
 Development: Jupyter Notebooks
 Visualization: matplotlib, seaborn
 
-Model Performance
-MetricScoreModelSVM (Linear Kernel)Test Accuracy71.2%Precision67.3%Recall67.3%F1-Score67.3%ROC-AUC83.2%
-
-Project Pipeline
+## Project Pipeline
 
 Raw Data (666 samples)
     ↓
@@ -110,20 +174,34 @@ Model Training & Tuning (6 algorithms tested)
     ↓
 Final Model: SVM (71.2% accuracy)
 
-Documentation
-Detailed documentation available in docs/ directory:
 
-ML Canvas: Complete ML project canvas
-Data Versioning: DVC implementation guide
-Preprocessing: Step-by-step data transformation
-Role Interactions: Team collaboration documentation
+## Reproducibility
 
-Contributing
-This is an academic project for MLOps course. All team members contribute following:
+- Deterministic seeds in params.yaml
+- All artifacts tracked via DVC
+- Metrics + plots logged to reports/
+- Exact steps encoded in dvc.yaml + notebooks
 
-Create feature branch: git checkout -b feature/your-feature
-Commit changes: git commit -m "feat: your feature"
-Push branch: git push origin feature/your-feature
-Create Pull Request for review
+## Roles and Interactions
 
+| From                   | To                   | Handoff                              |
+| :--------------------- | :------------------- | :----------------------------------- |
+| Data Engineer          | Data Scientist       | Processed dataset + data dictionary  |
+| Data Scientist         | ML Engineer          | Feature spec + baseline metrics      |
+| ML Engineer            | DevOps/Software Eng. | Containerized training + inference   |
+| DevOps + Software Eng. | All                  | CI/CD, style checks, release process |
 
+## Contributing
+
+git checkout -b feature/<slug>
+git commit -m "feat: add SVM grid search"
+Open a PR → request review from role owner
+Ensure checks pass and dvc pull works
+
+## Ethics & Responsible AI
+
+- Monitor fairness metrics across sensitive attributes (e.g., gender, caste, medium)
+- Document limitations in models/model_card.md
+- Implement feedback loop and periodic model review for drift
+
+  
