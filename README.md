@@ -130,6 +130,8 @@ mlops-eq16/
 │   │   └── track_data_dvc.sh
 ├── README.md
 ├── .gitignore
+├── dvc.yaml
+├── params.yaml
 
 ```
 ## Quick Start
