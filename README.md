@@ -91,22 +91,19 @@ Binary classification model to predict student entrance exam performance (High P
 ```
 mlops-eq16/
 ├── README.md
-├── requirements.txt
 ├── .gitignore
-├── .dvc/
 ├── data/
-│   └── processed/
-│       └── *.csv.dvc
-├── notebooks/
-│   ├── 01_EDA.ipynb
-│   ├── 02_Data_Preprocessing.ipynb
-│   ├── 03_Data_Versioning.ipynb
-│   └── 04_Model_Building.ipynb
 ├── docs/
-│   ├── ML_Canvas.md
-│   └── ROLE_INTERACTIONS_DOCUMENTATION.txt
-└── visualizations/
-└── model_evaluation_results.png
+├── mlops/
+├── models/
+├── notebooks/
+├── references/
+├── reports/
+│   └── figures/
+├── scripts/
+└── src/
+    └── scripts/
+
 ```
 ## Quick Start
 
