@@ -90,8 +90,6 @@ Binary classification model to predict student entrance exam performance (High P
 ### Project Structure
 ```
 mlops-eq16/
-├── README.md
-├── .gitignore
 ├── data/
 │   └── interim/
 │   └── processed/
@@ -119,13 +117,15 @@ mlops-eq16/
 ├── notebooks/
 │   └── phase1_team16.ipynb
 ├── references/
-├── reports/figures/
-│   └── model_evaluation_results.png
-├── scripts/
+├── reports/
+│   └── figures/
+│   │   └── model_evaluation_results.png
 └── src/
-    └── scripts/
+├── └── scripts/
 │   │   └── init_dvc.sh
 │   │   └── track_data_dvc.sh
+├── README.md
+├── .gitignore
 
 ```
 ## Quick Start
