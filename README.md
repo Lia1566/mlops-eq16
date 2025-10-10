@@ -121,6 +121,10 @@ mlops-eq16/
 │   └── figures/
 │   │   └── model_evaluation_results.png
 └── src/
+│   ├── data/         # data loading/making
+│   ├── features/     # preprocessing/encoders
+│   ├── models/       # train/predict/evaluate
+│   ├── visualization/# plotting utils
 ├── └── scripts/
 │   │   └── init_dvc.sh
 │   │   └── track_data_dvc.sh
