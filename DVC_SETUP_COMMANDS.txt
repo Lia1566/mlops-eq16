@@ -1,0 +1,29 @@
+
+# 1. Initialize DVC in your project
+dvc init
+
+# 2. Add original dataset to DVC tracking
+dvc add student_entry_performance_original.csv
+
+# 3. Add cleaned dataset
+dvc add student_performance_cleaned.csv
+
+# 4. Add encoded dataset
+dvc add student_performance_encoded.csv
+
+# 5. Add train/test splits
+dvc add student_performance_train.csv
+dvc add student_performance_test.csv
+
+# 6. Commit DVC files to git
+git add student_entry_performance_original.csv.dvc
+git add student_performance_cleaned.csv.dvc
+git add student_performance_encoded.csv.dvc
+git add student_performance_train.csv.dvc
+git add student_performance_test.csv.dvc
+git add .dvc/.gitignore .dvc/config
+git commit -m "Add data versioning with DVC"
+
+# 7. Push data to DVC remote (configure remote storage first)
+# dvc remote add -d storage <your-remote-path>
+# dvc push
