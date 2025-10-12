@@ -10,7 +10,7 @@ Binary classification model to predict student entrance exam performance (High P
 ---
 
 ## Requirements Analysis
-**Problem statement:** Predict whether a student’s entrance-exam performance is *High* or *Lower* using demographic and academic features to inform targeted support.
+**Problem statement:** Predict student performance using academic and demographic variables to enable early interventions and data-informed program decisions.
 
 **Value proposition**
 - **Students:** early identification for tutoring or program placement  
@@ -30,149 +30,182 @@ Binary classification model to predict student entrance exam performance (High P
 ---
 
 ## Data Manipulation & Preparation
-- **EDA notebook:** `notebooks/01_EDA.ipynb`  
-- **Cleaning & validation:** `notebooks/02_Data_Preprocessing.ipynb`  
-- Handled null/empty values, inconsistencies, outliers, invalid categories.  
-- **Transformations for modeling:** type casting, encoding, scaling, train/test split.  
-- **Metrics tracked:** row counts, duplicates removed, feature cardinalities, class balance.
+All raw and processed data are DVC tracked under data/
+
+| Stage                | Output                                                          | Description                             |
+| -------------------- | --------------------------------------------------------------- | --------------------------------------- |
+| **Raw Data**         | `data/raw/student_entry_performance_original.csv`               | Original dataset from UCI               |
+| **Cleaned Data**     | `data/processed/student_performance_cleaned.csv`                | Duplicates removed, binary target added |
+| **Encoded Data**     | `data/processed/student_performance_encoded.csv`                | Ordinal and one-hot encodings applied   |
+| **Scaled Data**      | `data/processed/student_performance_binary_preprocessed.csv`    | Features scaled for modeling            |
+| **Train/Test Split** | `student_performance_train.csv`, `student_performance_test.csv` | 80/20 stratified split                  |
 
 ---
 
 ## Data Exploration & Preprocessing
-- **Descriptive statistics & visuals:** distributions, correlations, target balance (`reports/figures/`).  
-- **Preprocessing techniques:**
-  - Normalization/Standardization  
-  - Categorical encoding (One-Hot / Ordinal)  
-  - Dimensionality reduction (PCA if applicable)  
-- **Artifacts:** `data/processed/` (DVC-tracked), `reports/figures/`
+All analysis and visualization steps are documented in Jupyter notebooks and output to reports/figures/.
+- Distribution plots, correlation heatmaps
+- Class balance and categorical variable profiles
+- Summary statistics and feature insights
 
 ---
 ## Data Versioning (DVC)
-- **Versioned items:** raw/interim/processed datasets, intermediate artifacts  
-- **Pipeline:** `dvc.yaml` (`prepare → preprocess → train → evaluate`), `params.yaml` for hyperparams  
-- **Remotes:** Google Drive / S3 / local remote (see `docs/DVC_SETUP.md`)  
-- **Change log:** `dvc metrics show` and `dvc plots diff`; human-readable `CHANGELOG.md`
+
+We implemented DVC to ensure reproducibility and collaboration across team members
+
+```bash
+# Initialize and configure
+dvc init
+git add .dvc .gitignore
+git commit -m "Initialize DVC"
+
+# Track processed datasets
+dvc add data/processed/
+git add data/processed.dvc
+git commit -m "Track processed datasets"
+
+# Reproduce pipeline
+dvc repro
+
+# Push artifacts
+dvc push
+
+```
+**Documentation**
+- Setuo instructions: `docs/DVC_SETUP_INSTRUCTIONS.txt`
+
+Command reference: `docs/DVC_SETUP_COMMANDS.txt`
+
+Change log summary: `docs/DATA_VERSIONING_SUMMARY.txt`
+
 ---
 ## Modeling, Tuning & Evaluation
 - **Algorithms:** Logistic Regression, SVM, Random Forest, XGBoost, kNN, Baseline Majority  
 - **Final baseline:** Linear SVM — Accuracy 71.2 %, Precision 67.3 %, Recall 67.3 %, F1 67.3 %, ROC-AUC 83.2 %  
 - **Hyperparameter tuning:** Grid/Random search with cross-validation  
 - **Selection criterion:** maximize Recall on “Lower” class, then AUC  
-- **Outputs:** confusion matrix, PR/ROC curves, model card (`models/model_card.md`)
+
+| Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
+|--------|-----------|-----------|--------|----------|
+| Logistic Regression | 70.4% | 66.2% | 65.9% | 66.0% | 81.5% |
+| Random Forest | 71.0% | 67.0% | 66.0% | 66.3% | 82.8% |
+| Linear SVM (final) | 71.2% | 67.3% | 67.3% | 67.3% | 83.2% |
+
+Artifacts:
+- Confusion matrix and ROC curves: `reports/figures/model_evaluation_results.png`
+- Model and scaler artifacts: `models/`
+- Parameter definitions: `params.yaml`
+- Pipeline: `dvc.yaml`
+ 
 ---
 ## GitHub Collaboration
-**Expectations**
-- Active contributions from all members (PRs, reviews)  
-- Documented roles (DevOps, Software Engineer, Data Engineer, ML Engineer, Data Scientist)  
-- Branching model: `main` (protected) → `dev` → `feature/<slug>`  
-- Commit style: Conventional Commits (`feat:`, `fix:`, `docs:` …)  
-- **CI (optional):** GitHub Actions for linting and `dvc pull` checks  
-- Code style: Black + isort + Flake8 + pre-commit hooks  
----
+- Active contributions from all members 
+- Documented roles (DevOps, Software Engineer, Data Engineer, ML Engineer, Data Scientist)
+- Roles were defined following MLOps best practices for clear ownership and reproducibility, 
 
 ### Team Members & Roles
 
-| Role | Name | Responsibilities |
-|------|------|-----------------|
-| **DevOps** | Esteban Hidekel Solares Orozco | Git/DVC setup, infrastructure, CI/CD |
-| **Software Engineer** | Jesús Antonio López Wayas | Code quality, documentation, integration |
-| **Data Engineer** | Natalia Nevarez Tinoco | Data pipelines, storage, quality |
-| **Data Scientist** | Data Scientist | EDA, feature engineering, analysis |
-| **ML Engineer** | Roberto López Baldomero | Model training, tuning, deployment |
+| Role                  | Name                           | Responsibilities                                   |
+| --------------------- | ------------------------------ | -------------------------------------------------- |
+| **DevOps Engineer**   | Esteban Hidekel Solares Orozco | Git/DVC setup, CI/CD, pipeline orchestration       |
+| **Software Engineer** | Jesús Antonio López Wayas      | Integration, documentation, and release versioning |
+| **Data Engineer**     | Natalia Nevárez Tinoco         | Data ingestion, validation, and transformation     |
+| **Data Scientist**    | Yander Alec Ortega Rosales     | Feature engineering, modeling, evaluation          |
+| **ML Engineer**       | Roberto López Baldomero        | Model optimization, reproducibility, deployment    |
 
+Detailed collaboration flow is available in `docs/ROLE_INTERACTIONS_DOCUMENTATION.txt`.
 ---
 
 ## Executive Presentation
-- **File:** `docs/executive_presentation.pdf`  
+- **File:** `docs/Fase1_equipo1.pdf`  
 - Summarizes problem → value → data → model → results → risks → ops plan  
 - Highlights actionable insights and limitations  
 
 ### Project Structure
 ```
 mlops-eq16/
+├── .dvc/
+│   ├── config/
 ├── data/
-│   └── interim/
+│   ├── raw/
+│       └── student_entry_performance_modified.csv
+│       └── student_entry_performance_modified.csv.dvc
+│       └── student_entry_performance_original.csv
+│       └── student_entry_performance_original.csv.dvc
+│   ├── interim/
+│       └── student_entry_performance_eda.csv.dcv
+│       └── student_entry_performance_binary_preprocessed.csv.dvc
+│       └── student_entry_performance_cleaned.csv.dvc
+│       └── student_entry_performance_encoded.csv.dvc
+│       └── student_entry_preprocessed.csv.dvc
+│       └── student_entry_test.csv.dvc
+│       └── student_entry_train.csv.dvc
 │   └── processed/
-│   └── raw/
-│   │   └── student_entry_performance_modified.csv
-│   │   └── student_entry_performance_modified.csv.dvc
-│   │   └── student_entry_performance_original.csv
-│   │   └── student_entry_performance_original.csv.dvc
 ├── docs/
-│   └── DATA_VERSIONING_SUMMARY.text
-│   └── DVC_SETUP_COMMANDS.text
-│   └── DVC_SETUO_INSTRUCTIONS.txt
+│   ├── DVC_SETUP_COMMANDS.txt
+│   ├── DVC_SETUP_INSTRUCTIONS.txt
+│   ├── PREPROCESSING_DOCUMENTATION.md
+│   ├── ROLE_INTERACTIONS_DOCUMENTATION.txt
 │   └── ML_Canvas.pdf
-│   └── PREPROCESSING_DOCUMENTATION.md
-│   └── ROLE_INTERACTIONS_DOCUMENTATION.txt
 ├── mlops/
-│   └── init.py
+│   ├── __init__.py
 │   └── modeling/
-│   │   └── init.py
+│       └── __init__.py
 ├── models/
-│   └── best_model_gradient_boosting.pkl
-│   └── best_model_gradient_boosting.okl.dvc
-│   └── scaler.pkl
+│   ├── best_model_gradient_boosting.pkl
+│   ├── best_model_gradient_boosting.pkl.dvc
+│   ├── scaler.pkl
 │   └── scaler.pkl.dvc
 ├── notebooks/
-│   └── phase1_team16.ipynb
+│   └── phase1_team16 copy.ipynb
+│   └── mlops-eq16_notebooks_phase1_team16.ipynb
+│   └── mlops-eq16_notebooks_phase1_team16_out.ipynb
 ├── references/
 ├── reports/
 │   └── figures/
-│   │   └── model_evaluation_results.png
-└── src/
-│   ├── data/         # data loading/making
-│   ├── features/     # preprocessing/encoders
-│   ├── models/       # train/predict/evaluate
-│   ├── visualization/# plotting utils
-├── └── scripts/
-│   │   └── init_dvc.sh
-│   │   └── track_data_dvc.sh
-├── README.md
+│       └── model_evaluation_results.png
+│       └── categorical_distributions_20251011_193439.png
+│       └── correlation_heatmap_20251011_193711.png
+│       └── parent_occupation_performance_20251011_193711.png
+│       └── performance_analysis_20251011_193143.png
+├── src/
+│   ├── data/
+│   ├── features/
+│   ├── models/
+│   └── visualization/
+│   └── scripts/
+│       └── init_dvc.sh
+│       └── track_data_dvc.sh
+├── .dvcignore
 ├── .gitignore
 ├── dvc.yaml
 ├── params.yaml
+├── requirements.txt
+└── README.md
+
+
 
 ```
 ## Quick Start
 
 ```bash
-# 1. Clone Repository
+# Clone repository
 git clone https://github.com/Lia1566/mlops-eq16.git
 cd mlops-eq16
 
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Environment
+# Create and activate environment
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-pre-commit install
 
-# 4.Pull Data with DVC
+# Pull data with DVC
 dvc pull
 
-# 4.Run Notebooks
-Execute notebooks in order:
-
-- `01_EDA.ipynb` - Exploratory Data Analysis
-- `02_Data_Preprocessing.ipynb` - Data cleaning and transformation
-- `03_Data_Versioning.ipynb` - DVC implementation
-- `04_Model_Building.ipynb` - Model training and evaluation
-
-# 5. 5. Reproduce full pipeline
+# Run the full pipeline
 dvc repro
 
-# 6. View metrics
+# View metrics
 dvc metrics show
-
-# DVC Basics
-
-dvc add data/raw/student_entry_performance_original.csv
-git add data/raw/.gitignore student_entry_performance_original.csv.dvc
-git commit -m "data: add raw student dataset"
-dvc push
 
 ```
 
@@ -181,8 +214,9 @@ dvc push
 Language: Python 3.x
 ML Libraries: scikit-learn, pandas, numpy
 Version Control: Git, DVC
-Development: Jupyter Notebooks
 Visualization: matplotlib, seaborn
+Workflow: Jupyter Notebooks, papermill
+Automation: Shell scripts under `/scripts`
 
 ## Project Pipeline
 
@@ -208,26 +242,48 @@ Final Model: SVM (71.2% accuracy)
 - Metrics + plots logged to reports/
 - Exact steps encoded in dvc.yaml + notebooks
 
-## Roles and Interactions
-
-| From                   | To                   | Handoff                              |
-| :--------------------- | :------------------- | :----------------------------------- |
-| Data Engineer          | Data Scientist       | Processed dataset + data dictionary  |
-| Data Scientist         | ML Engineer          | Feature spec + baseline metrics      |
-| ML Engineer            | DevOps/Software Eng. | Containerized training + inference   |
-| DevOps + Software Eng. | All                  | CI/CD, style checks, release process |
 
 ## Contributing
 
-git checkout -b feature/<slug>
-git commit -m "feat: add SVM grid search"
-Open a PR → request review from role owner
-Ensure checks pass and dvc pull works
+To contribute to this project, please follow the standard workflow below:
+```bash
+1. **Create a new branch**
+git checkout -b feature/<short-descriptive-slug>
+# example: git checkout -b feature/svm-grid-search
+
+2. Stage and commit changes
+git add .
+git commit -m "feat: add SVM grid search pipeline"
+
+3. Push your branch to the remote repository
+git push origin feature/<short-descriptive-slug>
+
+4. Open a Pull Request (PR)
+- Assign the PR to the appropriate role owner (e.g., Data Scientist, ML Engineer).
+- Request at least one teammate review before merging.
+- Include a short summary of what changed and why.
+
+5. Before merging
+- Ensure all automated checks pass
+- Verify DVC data and pipeline integrity
+dvc pull && dvc repro
+
+6. Merge
+- Once approved, merge into the `main` brach
+- Use squash merge to maintain clean, linear commit history
+
+NOTES: Use clear and consistent branch names:
+- feature/<feature-name> → new functionality
+- fix/<issue-description> → bug fixes
+- docs/<update-description> → documentation updates
+- refactor/<component> → code restructuring without logic change
+- experiment/<test-name> → model or parameter experiments
+
+```
 
 ## Ethics & Responsible AI
 
 - Monitor fairness metrics across sensitive attributes (e.g., gender, caste, medium)
-- Document limitations in models/model_card.md
 - Implement feedback loop and periodic model review for drift
 
   
