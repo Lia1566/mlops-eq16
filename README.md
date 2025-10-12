@@ -246,19 +246,25 @@ Final Model: SVM (71.2% accuracy)
 ## Contributing
 
 To contribute to this project, please follow the standard workflow below:
-```bash
+
 1. Create a new branch
+```bash
 git checkout -b feature/<short-descriptive-slug>
 # example: git checkout -b feature/svm-grid-search
+```
 
 2. Stage and commit changes
+```
 git add .
 git commit -m "feat: add SVM grid search pipeline"
+```
 
-3. Push your branch to the remote repository
+4. Push your branch to the remote repository
+```
 git push origin feature/<short-descriptive-slug>
+```
 
-4. Open a Pull Request (PR)
+6. Open a Pull Request (PR)
 - Assign the PR to the appropriate role owner (e.g., Data Scientist, ML Engineer).
 - Request at least one teammate review before merging.
 - Include a short summary of what changed and why.
@@ -266,7 +272,9 @@ git push origin feature/<short-descriptive-slug>
 5. Before merging
 - Ensure all automated checks pass
 - Verify DVC data and pipeline integrity
+```
 dvc pull && dvc repro
+```
 
 6. Merge
 - Once approved, merge into the `main` brach
@@ -279,7 +287,6 @@ NOTES: Use clear and consistent branch names:
 - refactor/<component> → code restructuring without logic change
 - experiment/<test-name> → model or parameter experiments
 
-```
 
 ## Ethics & Responsible AI
 
