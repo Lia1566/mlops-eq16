@@ -157,10 +157,12 @@ mlops-eq16/
 │   ├── scaler.pkl
 │   └── scaler.pkl.dvc
 ├── notebooks/
-│   └── phase1_team16 copy.ipynb
+│   └── phase1_team16 copy.ipynb  <---- Main notebook - EDA, preprocessing, DVC steps
 │   └── mlops-eq16_notebooks_phase1_team16.ipynb
 │   └── mlops-eq16_notebooks_phase1_team16_out.ipynb
 ├── references/
+│   └── Cookiecutter Data Science
+│   └── Machine Learning Canvas (v1.2).pdf
 ├── reports/
 │   └── figures/
 │       └── model_evaluation_results.png
@@ -169,10 +171,10 @@ mlops-eq16/
 │       └── parent_occupation_performance_20251011_193711.png
 │       └── performance_analysis_20251011_193143.png
 ├── src/
-│   ├── data/
-│   ├── features/
-│   ├── models/
-│   └── visualization/
+│   ├── data/ # (future: loading/making data scripts
+│   ├── features/ #(future: preprocessing functions)
+│   ├── models/ # (future: training/evaluation)
+│   └── visualization/ # (future: plotting utilities)
 │   └── scripts/
 │       └── init_dvc.sh
 │       └── track_data_dvc.sh
