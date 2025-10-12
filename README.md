@@ -247,7 +247,7 @@ Final Model: SVM (71.2% accuracy)
 
 To contribute to this project, please follow the standard workflow below:
 ```bash
-1. **Create a new branch**
+1. Create a new branch
 git checkout -b feature/<short-descriptive-slug>
 # example: git checkout -b feature/svm-grid-search
 
