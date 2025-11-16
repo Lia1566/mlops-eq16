@@ -86,7 +86,7 @@ Change log summary: `docs/DATA_VERSIONING_SUMMARY.txt`
 - **Selection criterion:** maximize Recall on “Lower” class, then AUC  
 
 | Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
-|--------|-----------|-----------|--------|----------|
+|--------|-----------|-----------|--------|----------| ----------| 
 | Logistic Regression | 70.4% | 66.2% | 65.9% | 66.0% | 81.5% |
 | Random Forest | 71.0% | 67.0% | 66.0% | 66.3% | 82.8% |
 | Linear SVM (final) | 71.2% | 67.3% | 67.3% | 67.3% | 83.2% |
